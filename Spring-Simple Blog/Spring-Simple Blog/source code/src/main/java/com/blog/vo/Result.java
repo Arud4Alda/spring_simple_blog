@@ -1,23 +1,23 @@
 package com.blog.vo;
 
 public class Result {
-	int result;
+	int index;
 	String message;
 
 	public Result() {
 	}
 
-	public Result(int result, String message) {
-		this.result = result;
+	public Result(int index, String message) {
+		this.index = index;
 		this.message = message;
 	}
 
-	public int getResult() {
-		return result;
+	public int getIndex() {
+		return index;
 	}
 
-	public void setResult(int result) {
-		this.result = result;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	public String getMessage() {

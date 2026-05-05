@@ -17,84 +17,89 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.dto.PostDTO;
 import com.blog.service.PostService;
 import com.blog.vo.Post;
 import com.blog.vo.Result;
+import org.springframework.web.util.HtmlUtils;
 
 @RestController
 public class PostController {
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	private static final String SUCCESS_MESSAGE = "Success";
+	private final PostService postService;
+
 	@Autowired
-	PostService postService;
+	public PostController(PostService postService) {
+		this.postService = postService;
+	}
 	
 	@GetMapping("/post")
 	public Post getPost(@RequestParam("id") Long id) {
-		Post post = postService.getPost(id);
-		return post;
+		return postService.getPost(id);
 	}
 	
 	@GetMapping("/posts")
 	public List<Post> getPosts() {
-		List<Post> posts = postService.getPosts();
-		return posts;
+		return postService.getPosts();
 	}
 	
 	@GetMapping("/posts/updtdate/asc")
 	public List<Post> getPostsOrderByUpdtAsc() {
-		List<Post> posts = postService.getPostsOrderByUpdtAsc();
-		return posts;
+		return postService.getPostsOrderByUpdtAsc();
 	}
 	
 	@GetMapping("/posts/regdate/desc")
 	public List<Post> getPostsOrderByRegDesc() {
-		List<Post> posts = postService.getPostsOrderByRegDesc();
-		return posts;
+		return postService.getPostsOrderByRegDesc();
 	}
 	
 	
 	@GetMapping("/posts/search/title")
 	public List<Post> searchByTitle(@RequestParam("query") String query) {
-		List<Post> posts = postService.searchPostByTitle(query);
-		return posts;
+		return postService.searchPostByTitle(query);
 	}
 	
 	//for Exercise 4-4
 	@GetMapping("/posts/search/content")
 	public List<Post> searchByContent(@RequestParam("query") String query) {
-		List<Post> posts = postService.searchPostByContent(query);
-		return posts;
+		return postService.searchPostByContent(query);
 	}
 	
 	@PostMapping("/post")
-	public Object savePost(HttpServletResponse response, @Valid @RequestBody Post postParam, BindingResult bindingResult)  {	
+    public Object savePost(HttpServletResponse response, @Valid @RequestBody PostDTO postDto, BindingResult bindingResult)  {
 		if (bindingResult.hasErrors()) {
             // Ambil pesan error dari @NotBlank (misal: "Judul artikel tidak boleh kosong!")
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             
             // Kembalikan pesan error menggunakan class Result milikmu
             return new Result(400, errorMessage);
-        }
+        }        
+        
+        String safeUser = HtmlUtils.htmlEscape(postDto.getUser());
+        String safeTitle = HtmlUtils.htmlEscape(postDto.getTitle());
+        String safeContent = HtmlUtils.htmlEscape(postDto.getContent());
 
-		Post post = new Post(postParam.getUser(), postParam.getTitle(), postParam.getContent());
-		boolean isSuccess = postService.savePost(post);
-		
-		if(isSuccess) {
-			return new Result(200, "Success");
-		} else {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
-		}
-	}
+        Post post = new Post(safeUser, safeTitle, safeContent);
+        
+        boolean isSuccess = postService.savePost(post);
+        
+        if(isSuccess) {
+            return new Result(200, SUCCESS_MESSAGE);
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Fail");
+        }
+    }
 	
 	@DeleteMapping("/post")
 	public Object deletePost(HttpServletResponse response, @RequestParam("id") Long id)  {
 		boolean isSuccess = postService.deletePost(id);
 		
-		log.info("id ::: " + id);
+		log.info("id ::: {}", id);
 		
 		if(isSuccess) {
-			return new Result(200, "Success");
+			return new Result(200, SUCCESS_MESSAGE);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return new Result(500, "Fail");
@@ -102,20 +107,24 @@ public class PostController {
 	}
 	
 	@PutMapping("/post")
-	public Object modifyPost(HttpServletResponse response, @Valid @RequestBody Post postParam, BindingResult bindingResult)  {
-		if (bindingResult.hasErrors()) {
+    public Object modifyPost(HttpServletResponse response, @Valid @RequestBody PostDTO postDto, BindingResult bindingResult)  {      
+        if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new Result(400, errorMessage);
         }
-			
-		Post post = new Post(postParam.getId(), postParam.getTitle(), postParam.getContent());
-		boolean isSuccess = postService.updatePost(post);
-				
-		if(isSuccess) {
-			return new Result(200, "Success");
-		} else {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
-		}
-	}
+
+        String safeTitle = HtmlUtils.htmlEscape(postDto.getTitle());
+        String safeContent = HtmlUtils.htmlEscape(postDto.getContent());
+
+        Post post = new Post(postDto.getId(), safeTitle, safeContent);
+        
+        boolean isSuccess = postService.updatePost(post);
+                
+        if(isSuccess) {
+            return new Result(200,SUCCESS_MESSAGE);
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Fail");
+        }
+    }
 }

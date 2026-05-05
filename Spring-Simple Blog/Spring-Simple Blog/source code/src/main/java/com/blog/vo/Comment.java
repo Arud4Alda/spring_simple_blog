@@ -24,8 +24,8 @@ public class Comment {
     @Column(name="user")
 	private String user;
     
-    @Column(name="comment")
-	private String comment;
+    @Column(name="note")
+	private String note;
     
     @Column(name="regDate")
 	private Date regDate;
@@ -33,10 +33,10 @@ public class Comment {
 	public Comment() {
 	}
 
-	public Comment(Long postId, String user, String comment) {
+	public Comment(Long postId, String user, String note) {
 		this.postId = postId;
 		this.user = user;
-		this.comment = comment;
+		this.note = note;
 		this.regDate = new Date();
 	}
 
@@ -64,12 +64,12 @@ public class Comment {
 		this.user = user;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getNote() {
+		return note;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public Date getRegDate() {

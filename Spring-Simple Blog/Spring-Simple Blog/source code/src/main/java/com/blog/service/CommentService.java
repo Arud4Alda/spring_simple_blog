@@ -11,33 +11,31 @@ import com.blog.vo.Comment;
 @Service
 public class CommentService {
 
+	private final CommentJpaRepository commentJpaRepository;
 	@Autowired
-	CommentJpaRepository commentJpaRepository;
-	
+	public CommentService(CommentJpaRepository commentJpaRepository) {
+		this.commentJpaRepository = commentJpaRepository;
+	}
+
 	public boolean  saveComment(Comment comment) {
-		Comment result = commentJpaRepository.save(comment);
-		boolean isSuccess = true;
-		
-		if(result == null) {
-			isSuccess = false;
+		try{
+			commentJpaRepository.save(comment);
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
-		
-		return isSuccess;
 	}
 
 	public List<Comment> getCommentList(Long postId) {
-		List<Comment> postList = commentJpaRepository.findAllByPostIdOrderByRegDateDesc(postId);
-		return postList;
+		return commentJpaRepository.findAllByPostIdOrderByRegDateDesc(postId);
 	}
 	
 	public List<Comment> searchCommentList(Long postId, String query) {
-		List<Comment> postList = commentJpaRepository.findByPostIdAndCommentContainingOrderByRegDateDesc(postId, query);
-		return postList;
+		return commentJpaRepository.findByPostIdAndCommentContainingOrderByRegDateDesc(postId, query);
 	}
 
 	public Comment getComment(Long id) {
-		Comment comment = commentJpaRepository.findOneById(id);
-		return comment;
+		return commentJpaRepository.findOneById(id);
 	}
 
 	public boolean deleteComment(Long id) {
