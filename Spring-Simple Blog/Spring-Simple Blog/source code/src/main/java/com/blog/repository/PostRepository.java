@@ -13,8 +13,11 @@ import com.blog.vo.Post;
 @Repository
 public class PostRepository {
 	
+	private final JdbcTemplate jdbcTemplate;
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	public PostRepository(JdbcTemplate jdbcTemplate){
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
 	public Post findById(Long id) {
 		String sql = "SELECT * FROM post WHERE id = ?";

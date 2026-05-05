@@ -72,7 +72,7 @@ public class AllInOneTest {
         sampleComment = new Comment();
         sampleComment.setId(10L);
         sampleComment.setPostId(1L);
-        sampleComment.setComment("Sangat bermanfaat!");
+        sampleComment.setNote("Sangat bermanfaat!");
         
     }
 
@@ -140,7 +140,7 @@ public class AllInOneTest {
         when(commentJpaRepository.findAllByPostIdOrderByRegDateDesc(1L)).thenReturn(Arrays.asList(sampleComment));
         List<Comment> comments = commentService.getCommentList(1L);
         assertEquals(1, comments.size());
-        assertEquals("Sangat bermanfaat!", comments.get(0).getComment());
+        assertEquals("Sangat bermanfaat!", comments.get(0).getNote());
     }
 
     @Test
@@ -217,14 +217,14 @@ public class AllInOneTest {
     @Test
     public void testResult_SuccessFlow() {
         Result result = new Result(200, "Berhasil");
-        assertEquals(200, result.getResult());
+        assertEquals(200, result.getIndex());
         assertEquals("Berhasil", result.getMessage());
     }
 
     @Test
     public void testResult_ErrorFlow() {
         Result result = new Result(500, "Terjadi kesalahan");
-        assertEquals(500, result.getResult());
+        assertEquals(500, result.getIndex());
         assertEquals("Terjadi kesalahan", result.getMessage());
     }
 

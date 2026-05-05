@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.dto.CommentDTO;
 import com.blog.service.CommentService;
 import com.blog.vo.Comment;
 import com.blog.vo.Result;
@@ -23,8 +24,8 @@ public class CommentController {
 	CommentService commentService;
 	
 	@PostMapping("/comment")
-	public Object savePost(HttpServletResponse response, @RequestBody Comment commentParam)  {		
-		Comment comment = new Comment(commentParam.getPostId(), commentParam.getUser(), commentParam.getComment());
+	public Object savePost(HttpServletResponse response, @RequestBody CommentDTO commentDto)  {		
+		Comment comment = new Comment(commentDto.getPostId(), commentDto.getUser(), commentDto.getComment());
 		boolean isSuccess = commentService.saveComment(comment);
 		
 		if(isSuccess) {
