@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.service.PostService;
 import com.blog.vo.Post;
 import com.blog.vo.Result;
+import org.springframework.web.util.HtmlUtils;
 
 @RestController
 public class PostController {
@@ -65,17 +66,23 @@ public class PostController {
 	}
 	
 	@PostMapping("/post")
-	public Object savePost(HttpServletResponse response, @RequestBody Post postParam)  {		
-		Post post = new Post(postParam.getUser(), postParam.getTitle(), postParam.getContent());
-		boolean isSuccess = postService.savePost(post);
-		
-		if(isSuccess) {
-			return new Result(200, "Success");
-		} else {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
-		}
-	}
+    public Object savePost(HttpServletResponse response, @RequestBody Post postParam)  {        
+        
+        String safeUser = HtmlUtils.htmlEscape(postParam.getUser());
+        String safeTitle = HtmlUtils.htmlEscape(postParam.getTitle());
+        String safeContent = HtmlUtils.htmlEscape(postParam.getContent());
+
+        Post post = new Post(safeUser, safeTitle, safeContent);
+        
+        boolean isSuccess = postService.savePost(post);
+        
+        if(isSuccess) {
+            return new Result(200, "Success");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Fail");
+        }
+    }
 	
 	@DeleteMapping("/post")
 	public Object deletePost(HttpServletResponse response, @RequestParam("id") Long id)  {
@@ -92,15 +99,20 @@ public class PostController {
 	}
 	
 	@PutMapping("/post")
-	public Object modifyPost(HttpServletResponse response, @RequestBody Post postParam)  {		
-		Post post = new Post(postParam.getId(), postParam.getTitle(), postParam.getContent());
-		boolean isSuccess = postService.updatePost(post);
-				
-		if(isSuccess) {
-			return new Result(200, "Success");
-		} else {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return new Result(500, "Fail");
-		}
-	}
+    public Object modifyPost(HttpServletResponse response, @RequestBody Post postParam)  {      
+        
+        String safeTitle = HtmlUtils.htmlEscape(postParam.getTitle());
+        String safeContent = HtmlUtils.htmlEscape(postParam.getContent());
+
+        Post post = new Post(postParam.getId(), safeTitle, safeContent);
+        
+        boolean isSuccess = postService.updatePost(post);
+                
+        if(isSuccess) {
+            return new Result(200, "Success");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Fail");
+        }
+    }
 }
