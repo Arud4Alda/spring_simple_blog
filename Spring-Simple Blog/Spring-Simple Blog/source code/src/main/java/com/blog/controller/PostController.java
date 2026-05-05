@@ -76,7 +76,7 @@ public class PostController {
         boolean isSuccess = postService.savePost(post);
         
         if(isSuccess) {
-            return new Result(200, "Success");
+            return new Result(200, SUCCESS_MESSAGE);
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new Result(500, "Fail");
@@ -108,7 +108,7 @@ public class PostController {
         boolean isSuccess = postService.updatePost(post);
                 
         if(isSuccess) {
-            return new Result(200, "Success");
+            return new Result(200,SUCCESS_MESSAGE);
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new Result(500, "Fail");
