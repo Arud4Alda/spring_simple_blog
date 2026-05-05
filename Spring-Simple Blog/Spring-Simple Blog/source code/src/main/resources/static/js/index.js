@@ -18,30 +18,38 @@ $(document).ready(function(){
     });
 	
 	$('#save_post_btn').click(function(){
-		var user = $('#create_user_text').val();
-		var title = $('#create_title_text').val();
-		var content = $('#create_content_text').val();
-		
-		console.log(user);
-		console.log(title);
-		console.log(content);
-		
-		var param = {
-			user: user,
-			title: title,
-			content: content
-		}
-		
-		$.ajax({
-	        url: "/post",
-	        method: "POST",
-	        dataType: 'json',
+        var user = $('#create_user_text').val();
+        var title = $('#create_title_text').val();
+        var content = $('#create_content_text').val();
+        
+        console.log(user);
+        console.log(title);
+        console.log(content);
+        
+        var param = {
+            user: user,
+            title: title,
+            content: content
+        }
+        
+        $.ajax({
+            url: "/post",
+            method: "POST",
+            dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify(param)
-	    }).then(function(data) {
-	    	window.location.href = '/';
-	    }, function(err) {
-	    	alert(err.responseJSON);
-	    });
-	});
+        }).then(function(data) {
+            // CEK BALASAN DARI BACKEND
+            if (data.result === 200) {
+                // Jika sukses simpan, kembali ke halaman utama
+                window.location.href = '/';
+            } else {
+                // Jika gagal (input kosong), tampilkan pesan error dari Java
+                alert(data.message);
+            }
+        }, function(err) {
+            // Jika server mati atau error 500
+            alert("Terjadi kesalahan koneksi ke server.");
+        });
+    });
 });
