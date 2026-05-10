@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "post")
@@ -16,97 +17,99 @@ public class Post {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="id")
-	private Long id;
+    private Long id;
     
     @Column(name="user")
-	private String user;
+    private String user;
     
     @Column(name="title")
-	private String title;
+    private String title;
     
     @Column(name="content")
-	private String content;
+    private String content;
     
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMMM yyyy, HH:mm", timezone = "Asia/Jakarta")
     @Column(name="regDate")
-	private Date regDate;
+    private Date regDate;
     
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMMM yyyy, HH:mm", timezone = "Asia/Jakarta")
     @Column(name="updtDate")
-	private Date updtDate;
+    private Date updtDate;
+    
+    public Post() {
+    }
+    
+    public Post(String user, String title, String content) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.regDate = new Date();
+        this.updtDate = new Date();
+    }
 
-	public Post() {
-	}
-	
-	public Post(String user, String title, String content) {
-		this.user = user;
-		this.title = title;
-		this.content = content;
-		this.regDate = new Date();
-		this.updtDate = new Date();
-	}
+    public Post(Long id, String user, String title, String content) {
+        super();
+        this.id = id;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.regDate = new Date();
+        this.updtDate = new Date();
+    }
 
-	public Post(Long id, String user, String title, String content) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.title = title;
-		this.content = content;
-		this.regDate = new Date();
-		this.updtDate = new Date();
-	}
+    public Post(Long id, String title, String content) {
+        super();
+        this.id = id;
+        this.title = title;
+        this.content = content;
+    }
 
-	public Post(Long id, String title, String content) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.content = content;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public Date getRegDate() {
+        return regDate;
+    }
 
-	public Date getRegDate() {
-		return regDate;
-	}
+    public void setRegDate(Date regDate) {
+        this.regDate = regDate;
+    }
 
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
-	}
+    public Date getUpdtDate() {
+        return updtDate;
+    }
 
-	public Date getUpdtDate() {
-		return updtDate;
-	}
-
-	public void setUpdtDate(Date updtDate) {
-		this.updtDate = updtDate;
-	}
+    public void setUpdtDate(Date updtDate) {
+        this.updtDate = updtDate;
+    }
 
 }

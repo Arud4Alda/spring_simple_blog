@@ -8,7 +8,7 @@ $(document).ready(function(){
     				+ '</h2> <p class="card-text">' + e.content 
     				+ '</p> <a href="/page/detail/' + e.id 
     				+ '" class="btn btn-primary">Read More &rarr;</a> </div> ' 
-    				+ '<div class="card-footer text-muted"> Posted on ' + e.updtDate 
+    				+ '<div class="card-footer text-muted"> Posted on ' + new Date(e.updtDate).toLocaleString('id-ID', {day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}) + '</div>'
     				+ ' by ' + e.user 
     				+ '</div> </div>');
     	});
