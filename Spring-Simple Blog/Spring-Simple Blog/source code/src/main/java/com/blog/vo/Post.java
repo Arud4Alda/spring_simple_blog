@@ -9,9 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.validation.constraints.NotBlank;
+import javax.persistence.Index;
 
 @Entity
-@Table(name = "post")
+@Table(name = "post", indexes = {
+    @Index(name = "idx_title", columnList = "title"),
+    @Index(name = "idx_content", columnList = "content")
+})
 public class Post {
 
     @Id
@@ -22,9 +27,11 @@ public class Post {
     @Column(name="user")
     private String user;
     
+    @NotBlank(message = "Judul artikel tidak boleh kosong!")
     @Column(name="title")
     private String title;
     
+    @NotBlank(message = "Isi artikel tidak boleh kosong!")
     @Column(name="content")
     private String content;
     

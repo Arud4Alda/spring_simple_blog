@@ -3,7 +3,9 @@ package com.blog.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
+import org.springframework.validation.BindingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,14 @@ public class PostController {
 	}
 	
 	@PostMapping("/post")
-    public Object savePost(HttpServletResponse response, @RequestBody PostDTO postDto)  {        
+    public Object savePost(HttpServletResponse response, @Valid @RequestBody PostDTO postDto, BindingResult bindingResult)  {
+		if (bindingResult.hasErrors()) {
+            // Ambil pesan error dari @NotBlank (misal: "Judul artikel tidak boleh kosong!")
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            
+            // Kembalikan pesan error menggunakan class Result milikmu
+            return new Result(400, errorMessage);
+        }        
         
         String safeUser = HtmlUtils.htmlEscape(postDto.getUser());
         String safeTitle = HtmlUtils.htmlEscape(postDto.getTitle());
@@ -98,8 +107,12 @@ public class PostController {
 	}
 	
 	@PutMapping("/post")
-    public Object modifyPost(HttpServletResponse response, @RequestBody PostDTO postDto)  {      
-        
+    public Object modifyPost(HttpServletResponse response, @Valid @RequestBody PostDTO postDto, BindingResult bindingResult)  {      
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return new Result(400, errorMessage);
+        }
+
         String safeTitle = HtmlUtils.htmlEscape(postDto.getTitle());
         String safeContent = HtmlUtils.htmlEscape(postDto.getContent());
 
