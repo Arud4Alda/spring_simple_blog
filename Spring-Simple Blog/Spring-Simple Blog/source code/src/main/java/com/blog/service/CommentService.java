@@ -31,8 +31,8 @@ public class CommentService {
 	}
 	
 	public List<Comment> searchCommentList(Long postId, String query) {
-		return commentJpaRepository.findByPostIdAndCommentContainingOrderByRegDateDesc(postId, query);
-	}
+        return commentJpaRepository.findByPostIdAndNoteContainingOrderByRegDateDesc(postId, query);
+    }
 
 	public Comment getComment(Long id) {
 		return commentJpaRepository.findOneById(id);

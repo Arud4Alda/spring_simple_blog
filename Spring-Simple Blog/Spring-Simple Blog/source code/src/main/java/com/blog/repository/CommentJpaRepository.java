@@ -12,8 +12,8 @@ import com.blog.vo.Comment;
 public interface CommentJpaRepository  extends JpaRepository<Comment, Serializable> {
 
 	List<Comment> findAllByPostIdOrderByRegDateDesc(Long postId);
-
-	List<Comment> findByPostIdAndCommentContainingOrderByRegDateDesc(Long postId, String query);
+	
+	List<Comment> findByPostIdAndNoteContainingOrderByRegDateDesc(Long postId, String query);
 
 	Comment findOneById(Long id);
 }
